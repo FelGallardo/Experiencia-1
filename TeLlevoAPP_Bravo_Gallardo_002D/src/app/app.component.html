@@ -1,27 +1,34 @@
-<ion-app >
- 
-  <ion-menu side="start" menuId="first" contentId="main" >
+<ion-app>
+
+  <ion-menu side="start" menuId="first" contentId="main">
     <ion-header>
       <ion-toolbar color="primary" class="letrita">
         <ion-title slot="end">TellevoApp</ion-title>
-        <ion-img src="assets/logo.png" style="height: 50px; width: 50px;"  slot="end"></ion-img>
+        <ion-img src="assets/logo.png" style="height: 50px; width: 50px;" slot="end"></ion-img>
       </ion-toolbar>
 
-    
+
     </ion-header>
-    <ion-content  >
-      <ion-toolbar >
+    <ion-content>
+
+      <ion-toolbar>
         <ion-list class="letrita">
           <ion-item routerLink="perfil">Perfil</ion-item>
-          <ion-item routerLink="">Modificar Vehiculo</ion-item>
-          <ion-item routerLink="">Ingresar Vehiculo</ion-item>
-          <ion-item routerLink="about">Sobre Nosotros</ion-item>
-          <ion-item routerLink="">Cerrar Sesion</ion-item>
+          <ion-item routerLink="vehiculo">Ingresar Vehiculo</ion-item>
+          <ion-item routerLink="modificar" [disabled]="!vehi">
+            <ion-label>
+              Modificar Vehiculo
+            </ion-label>
+          </ion-item>
+        
+        
+        <ion-item routerLink="about">Sobre Nosotros</ion-item>
+   
         </ion-list>
       </ion-toolbar>
     </ion-content>
-    
+
   </ion-menu>
-  
+
   <ion-router-outlet id="main"></ion-router-outlet>
 </ion-app>

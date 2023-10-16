@@ -1,10 +1,36 @@
 <ion-header>
-
 </ion-header>
+<router-outlet></router-outlet>
 
-<ion-content class="letrita">
-    <br><br><br>
-    <ion-title class="centertext"><b>TeLlevoApp</b></ion-title>
+<ion-content class="letrita" >
+  <br><br><br>
+  <ion-title class="centertext"><b>TeLlevoApp</b></ion-title>
 
-    <ion-img src="./assets/map.gif"></ion-img>
+  <ion-img src="./assets/map.gif"></ion-img>
+
+
+  <div *ngIf="autenticado == true" class="centertext">
+    <p>Bienvenido {{ nombreuser }}</p>
+  </div>
+  <div *ngIf="autenticado == false || autenticado == undefined" class="centertext ">
+    <p>No tienes cuenta iniciada.</p>
+  </div>
+  <ion-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col *ngFor="let day of clima.time; let i = index">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title color="black">{{ mapDia(i) }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>Temperatura máxima: {{ clima.temperature_2m_max[i] }} °C</p>
+              <p>Temperatura mínima: {{ clima.temperature_2m_min[i] }} °C</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+
 </ion-content>

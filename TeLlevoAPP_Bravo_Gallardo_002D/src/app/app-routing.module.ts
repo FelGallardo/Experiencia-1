@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'inicio',
+    redirectTo: 'iniciosesion',
     pathMatch: 'full'
   },
   
@@ -39,6 +39,22 @@ const routes: Routes = [
   {
     path: 'registro',
     loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
+  },
+  {
+    path: 'inicio/iniciotab/:correo',
+    loadChildren: () => import('./pages/inicio/inicio.module').then( m => m.InicioPageModule)
+  },
+  {
+    path: 'vehiculo',
+    loadChildren: () => import('./pages/vehiculo/vehiculo.module').then( m => m.VehiculoPageModule)
+  },
+  {
+    path: 'modificar',
+    loadChildren: () => import('./pages/modificar/modificar.module').then( m => m.ModificarPageModule)
+  },
+  {
+    path: 'modificar',
+    loadChildren: () => import('./pages/modificar/modificar.module').then( m => m.ModificarPageModule)
   },
 ];
 

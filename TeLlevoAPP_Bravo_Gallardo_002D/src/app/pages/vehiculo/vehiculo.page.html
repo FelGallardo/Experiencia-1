@@ -1,0 +1,52 @@
+<ion-header >
+  <ion-toolbar color = "primary">
+    <ion-back-button slot="start" ></ion-back-button>
+    <ion-title>Registro</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding letritas">
+  <br><br><br><br>
+  <ion-title class="centertext"><b> Registro de Vehiculo </b></ion-title>
+
+  <ion-card class="letritas">
+    <ion-card-header>
+      <ion-img src="./assets/auto.png"></ion-img>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-input label="Patente"
+                  label-placement="floating "
+                  placeholder="SUBUWU"
+                  fill="solid"
+                  type="email"
+                  [(ngModel)]="newVehiculo.patente"
+                  required></ion-input>
+        <br>
+        <ion-input label="Marca"
+                  label-placement="floating "
+                  placeholder="Nissan"
+                  fill="solid"
+                  [(ngModel)]="newVehiculo.marca" required>
+      </ion-input>
+      <br>
+      <ion-input label="Modelo"
+                  label-placement="floating "
+                  placeholder="Tida Sport"
+                  fill="solid"
+                  [(ngModel)]="newVehiculo.modelo" required>
+                  
+      </ion-input>
+      <br>
+      <ion-input label="Color"
+                label-placement="floating "
+                placeholder="Rosado fosforecente"
+                fill="solid"
+                [(ngModel)]="newVehiculo.color" required>
+      </ion-input>
+      <br>  
+      <ion-button (click)= "addVehiculo()">Agregar Vehiculo</ion-button>
+      </ion-card-content>
+
+  </ion-card>
+</ion-content>

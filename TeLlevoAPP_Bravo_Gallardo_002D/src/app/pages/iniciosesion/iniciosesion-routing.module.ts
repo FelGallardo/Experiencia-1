@@ -11,7 +11,12 @@ const routes: Routes = [
   {
     path: 'registro',
     loadChildren: () => import('./../../pages/registro/registro.module').then( m => m.RegistroPageModule)
-  }
+  },
+  {
+    path: 'iniciotab',
+    loadChildren: () => import('./../../pages/iniciotab/iniciotab.module').then( m => m.IniciotabPageModule)
+  },
+
 ];
 
 @NgModule({
