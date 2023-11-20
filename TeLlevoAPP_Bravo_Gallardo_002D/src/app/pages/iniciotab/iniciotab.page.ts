@@ -25,7 +25,7 @@ export class IniciotabPage implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (params['correo']) {
         const correo = params['correo'];
-        this.carga(correo);
+        this.carga();
       }
     });
 
@@ -50,13 +50,15 @@ export class IniciotabPage implements OnInit {
     return diasSemana[numeroDia];
   }
 
-  carga(correo: string) {
+  async carga() {
     // Verificar si el usuario está autenticado usando localStorage
     const autenticadoStr = localStorage.getItem('autenticado');
     this.autenticado = autenticadoStr === 'true';
+    const uid = await this.storageService.obtenerUIDUsuarioActual();
+    let path = `users/${uid}`;
 
-    if (this.autenticado && correo) {
-      this.storageService.traeUsuario(correo).then((user: User | null) => {
+    if (this.autenticado && uid) {
+      this.storageService.getDocument(path).then((user: User ) => {
         console.log('Usuario encontrado:', user);
         if (user) {
           console.log('Nombre de usuario:', user.nombre);

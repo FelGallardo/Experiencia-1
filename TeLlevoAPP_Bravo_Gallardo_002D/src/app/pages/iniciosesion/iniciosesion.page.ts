@@ -17,7 +17,7 @@ export class IniciosesionPage implements OnInit {
     private toastController: ToastController,
     private router: Router,
     private formBuilder: FormBuilder
-  ) {
+      ) {
     this.newUserForm = this.formBuilder.group({
       correo: ['', [Validators.required, Validators.email]],
       contrasena: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(10)]]
@@ -32,38 +32,39 @@ export class IniciosesionPage implements OnInit {
       console.log('Datos válidos:', formData);
 
       this.storageService.cambiaAuten(true);
-      this.verifica(formData.correo, formData.contrasena);
+
+      this.storageService.login(this.newUserForm.value.correo, this.newUserForm.value.contrasena). then(res=>{
+        
+        this.getUserInfo(res.user.uid);
+
+      });
+      this.storageService.correopubic = this.newUserForm.value.correo;
     } else {
       this.showToast('Por favor, ingrese datos válidos.');
     }
   }
+  getUserInfo(uid: string) {
+    if (this.newUserForm.valid) {
+      const newUser: User = this.newUserForm.value;
 
-  verifica(correo: string, contrasena: string) {
-    this.storageService.correopubic = correo;
+      newUser.idUser = Date.now();
 
-    this.storageService.traeUsuario(correo).then((user) => {
-      if (user) {
-        if (user.contrasena === contrasena) {
-          console.log('Inicio de sesión exitoso');
-          localStorage.setItem('autenticado', 'true');
-          this.showToast(`Bienvenido, ${user.nombre}!`);
+      let path = `users/${uid}`;
+      
 
-          this.router.navigate(['/inicio/iniciotab'], { queryParams: { correo: user.correo } });
-          this.storageService.cambiaAuten(true);
-          console.log('Autenticado:', true);
-        } else {
-          console.log('Contraseña incorrecta');
-          this.showToast('Contraseña incorrecta');
-        }
-      } else {
-        console.log('Usuario no existe');
-        this.showToast('Usuario no existe');
-      }
-    }).catch((error) => {
-      console.error('Error al obtener usuario', error);
-      this.showToast('Error al verificar usuario');
-    });
+      this.storageService.getDocument(path).then((user: User) => {
+
+         this.storageService.actnombre(newUser.nombre);
+        this.storageService.cambiaAuten(true);
+        localStorage.setItem('autenticado', 'true');
+        this.router.navigate(['/inicio/iniciotab'], { queryParams: { correo: newUser.correo } });
+        this.newUserForm.reset();
+
+      
+      });
+    }
   }
+ 
 
   async showToast(msg: string) {
     const toast = await this.toastController.create({

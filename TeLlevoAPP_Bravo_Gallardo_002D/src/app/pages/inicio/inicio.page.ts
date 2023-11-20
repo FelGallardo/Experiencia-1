@@ -27,6 +27,7 @@ export class InicioPage implements OnInit {
     // Obtener el estado de autenticación antes de cargar la página
     this.autenticado = this.storageService.estaAutenticado();
     console.log('Autenticado al inicio:', this.autenticado);
+
     
 
     this.route.paramMap.subscribe(params => {
@@ -55,17 +56,17 @@ export class InicioPage implements OnInit {
     // Obtener el estado de autenticación al cargar la página
     this.autenticado = this.storageService.estaAutenticado();
     console.log('Autenticado en carga:', this.autenticado);
-
-    const correo = this.storageService.correopubic;
-    const yesono: boolean =  await this.storageService.usuarioTieneVehiculo(correo);
-    if(yesono == true){
-      this.storageService.tiene = true;
-      this.vehi = this.storageService.tiene;
-      console.log('si tiene')
-    }else{
-      this.storageService.tiene = false;
-      this.vehi = this.storageService.tiene;
+  
+    const uidUsuarioActual = await this.storageService.obtenerUIDUsuarioActual();
+    const vehiculoUsuario = await this.storageService.obtenerVehiculoPorUIDUsuario(uidUsuarioActual);
+    
+    if (vehiculoUsuario) {
+      // El usuario tiene un vehículo, puedes acceder a sus propiedades aquí
+      console.log('Vehículo del usuario:', vehiculoUsuario);
+      this.vehi = vehiculoUsuario;
+    } else {
+      // El usuario no tiene un vehículo registrado
+      console.log('El usuario no tiene un vehículo registrado.');
     }
-    console.log('tienen vehiculo : ', this.vehi);
   }
 }

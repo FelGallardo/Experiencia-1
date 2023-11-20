@@ -16,6 +16,10 @@ const routes: Routes = [
     path: 'iniciotab',
     loadChildren: () => import('./../../pages/iniciotab/iniciotab.module').then( m => m.IniciotabPageModule)
   },
+  {
+    path: 'olvidacontra',
+    loadChildren: () => import('./../../pages/olvidacontra/olvidacontra.module').then( m => m.OlvidacontraPageModule)
+  },
 
 ];
 

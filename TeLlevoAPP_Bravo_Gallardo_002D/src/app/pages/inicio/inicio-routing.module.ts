@@ -37,6 +37,10 @@ const routes: Routes = [
         path: 'registro',
         loadChildren: () => import('./../../pages/registro/registro.module').then( m => m.RegistroPageModule)
       },
+      {
+        path: 'modifica-perfil',
+        loadChildren: () => import('./../../pages/modifica-perfil/modifica-perfil.module').then( m => m.ModificaPerfilPageModule)
+      },
       
     ]
   }

@@ -63,48 +63,38 @@ export class VehiculoPage implements OnInit {
   addVehiculo() {
     this.newVehiculo.idVehiculo = Date.now();
     const correo = this.storageService.correopubic;
-    console.log('correo encontrado',correo);
-    // Asocia el vehículo al usuario si hay un usuario correspondiente al correo almacenado
-    this.storageService.getUsuarioByCorreo(correo).then(user => {
-      if (user) {
-        user.vehiculo = this.newVehiculo;
-  
-        // Actualiza el usuario para asociar el vehículo
-        this.storageService.updateUser(user).then(() => {
-          console.log('Vehículo asociado al usuario:', user);
-  
-          // Muestra un mensaje indicando que el vehículo se ha asociado al usuario
-          this.showToast('Vehículo asociado al usuario.');
-  
-          // Reinicia el nuevo vehículo
-          this.newVehiculo = <Vehiculo>{};
-  
-          // Recarga la lista de vehículos
-          this.loadVehiculo();
-  
-        }).catch(error => {
-          console.error('Error al asociar vehículo al usuario:', error);
-        });
+    console.log('correo encontrado', correo);
+
+    // Agregado: Obtener el UID del usuario actual
+    this.storageService.obtenerUIDUsuarioActual().then((uid: string | null) => {
+      if (uid) {
+        // Asocia el vehículo al usuario actual
+        this.newVehiculo.uid = uid;
+        
+        // Almacena el vehículo como un documento en Firestore
+        const path = 'vehiculos'; // Puedes cambiar el nombre de la colección según tus necesidades
+        this.storageService.setDocument(path + '/' + this.newVehiculo.uid, this.newVehiculo)
+          .then(() => {
+            console.log('Vehículo asociado al usuario y almacenado en Firestore:', this.newVehiculo);
+
+            // Muestra un mensaje indicando que el vehículo se ha asociado al usuario y almacenado en Firestore
+            this.showToast('Vehículo asociado al usuario y almacenado en Firestore correctamente.');
+
+            // Reinicia el nuevo vehículo
+            this.newVehiculo = <Vehiculo>{};
+
+            // Recarga la lista de vehículos
+            this.loadVehiculo();
+          })
+          .catch(error => {
+            console.error('Error al almacenar el vehículo en Firestore:', error);
+          });
       } else {
-        console.error('No hay usuario correspondiente al correo almacenado.');
-        return;
+        console.error('No se pudo obtener el UID del usuario actual.');
       }
     });
-  
-    // Almacena el vehículo de forma independiente
-    this.storageService.addVehiculo(this.newVehiculo).then(() => {
-      console.log('Vehículo registrado:', this.newVehiculo);
-  
-      // Muestra un mensaje indicando que el vehículo se ha registrado
-      this.showToast('Vehículo registrado correctamente.');
-  
-      // Recarga la lista de vehículos
-      this.loadVehiculo();
-  
-    }).catch(error => {
-      console.error('Error al registrar vehículo:', error);
-    });
   }
+
   async showToast(msg: string) {
     const toast = await this.toastController.create({
       message: msg,

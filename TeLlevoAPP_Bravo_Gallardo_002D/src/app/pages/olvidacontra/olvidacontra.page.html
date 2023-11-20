@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-title class="ion-text-center"><b>Recuperar Contraseña</b></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding letritas">
+  <ion-card class="letritas">
+    <ion-card-header>
+      <ion-img src="./assets/avatar.png"></ion-img>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="UserForm" (ngSubmit)="login()">
+        <ion-item>
+          <ion-label position="floating">Correo Electrónico</ion-label>
+          <ion-input formControlName="correo" labelPlacement="stacked" type="email"></ion-input>
+        </ion-item>
+        <br>
+        <ion-button slot="start" type="submit">Recuperar</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

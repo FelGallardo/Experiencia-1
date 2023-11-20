@@ -1,0 +1,43 @@
+<ion-header >
+  <ion-toolbar color="primary">
+    <ion-back-button slot="start" ></ion-back-button>
+    <ion-title>Ver ruta</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding letritas">
+  <div class="map" #map ></div>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-label *ngIf="viaje && viaje.inicionom">
+        <h2 slot="start">Inicio Viaje:</h2>
+        <div class="name" slot="start">&nbsp;{{ viaje.inicionom }}</div>
+      </ion-label>
+      <br>
+      <ion-label *ngIf="viaje && viaje.inicionom">
+        <h2 slot="start">Termino Viaje:</h2>
+        <div class="name" slot="start">&nbsp;{{ viaje.nomdestino }}</div>
+      </ion-label>
+      <br>
+      <ion-label *ngIf="viaje && viaje.inicionom">
+        <h2 slot="start">Costo:</h2>
+        <div class="name" slot="start">&nbsp;{{ viaje.costo }}</div>
+      </ion-label>
+      <br>
+      <ion-label *ngIf="conductor && conductor.nombre">
+        <h2 slot="start">Conductor:</h2>
+        <div class="name" slot="start">&nbsp;{{ conductor.nombre }}</div>
+      </ion-label>
+      <br>
+      <ion-label *ngIf="vehiculocon && vehiculocon.patente">
+        <h2 slot="start">Patente Vehiculo:</h2>
+        <div class="name" slot="start">&nbsp;{{ vehiculocon.patente }}</div>
+      </ion-label>
+      
+      <ion-button (click)="iralviaje(uidviaje)" >Quiero ir al Viaje!</ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

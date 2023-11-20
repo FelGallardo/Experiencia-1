@@ -1,7 +1,28 @@
-<ion-header >
+<ion-content class="ion-padding letritas">
+    <!-- Itera sobre la lista de viajes y muestra la información de cada uno -->
 
-</ion-header>
-
-<ion-content >
-
-</ion-content>
+    <ion-card class="letritas" *ngFor="let viaje of nViajes" style="margin-top: 100px;">
+      <ion-card-content>
+        <ion-label>
+          <h2 slot="start">Inicio Viaje:</h2>
+          <div class="name" slot="start">&nbsp;{{ viaje.inicionom }}</div>
+        </ion-label>
+        <br>
+        <ion-label>
+          <h2 slot="end">Termino Viaje:</h2>
+          <div class="name" slot="end">&nbsp;{{ viaje.nomdestino }}</div>
+        </ion-label>
+        <br>
+        <ion-label>
+          <h2>Precio:</h2>
+          <div class="name" slot="">&nbsp;{{ viaje.costo }}</div>
+        </ion-label>
+        <br>
+        <ion-label>
+          <h2>Asientos Disponibles:</h2>
+          <div class="name" slot="">&nbsp;{{ viaje.cantP}}</div>
+        </ion-label>
+        <ion-button (click)="irAModificarPerfil(viaje.uidconductor)">Visualizar Viaje</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ion-content>

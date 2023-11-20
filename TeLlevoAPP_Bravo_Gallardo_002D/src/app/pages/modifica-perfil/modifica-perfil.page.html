@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-back-button slot="start"></ion-back-button>
+    <ion-title>Modificar Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding letritas">
+  <br /><br /><br /><br />
+  <ion-title class="centertext"><b> Modificar Perfil </b></ion-title>
+
+  <ion-card class="letritas">
+    <ion-card-header>
+      <ion-img src="./assets/avatar.png"></ion-img>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="newUserForm" (ngSubmit)="ModificaUser()">
+
+        <ion-item>
+          <ion-label position="floating">Nombre de Usuario</ion-label>
+          <ion-input formControlName="nombre" type="text" required></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input formControlName="contrasena" type="password" required minlength="8" maxlength="10"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="floating">Repetir Contraseña</ion-label>
+          <ion-input formControlName="contrasena2" type="password" required minlength="8" maxlength="10"></ion-input>
+        </ion-item>
+
+
+        <br>
+        <ion-button (click)="ModificaUser()">Modificar Perfil</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
