@@ -12,13 +12,19 @@ import { Drivers } from '@ionic/storage';
 import { HttpClientModule } from '@angular/common/http';
 
 
+// fire base
+
+import { AngularFireModule } from '@angular/fire/compat';
+import { environment } from 'src/environments/environment';
+
+
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule  , IonicStorageModule.forRoot({
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, AngularFireModule.initializeApp(environment.firebaseConfig), IonicStorageModule.forRoot({
     name: 'mydb',
-    driverOrder:[Drivers.IndexedDB,Drivers.LocalStorage]
+    driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage]
   })],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

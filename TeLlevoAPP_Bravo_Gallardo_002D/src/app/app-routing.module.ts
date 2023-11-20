@@ -53,9 +53,21 @@ const routes: Routes = [
     loadChildren: () => import('./pages/modificar/modificar.module').then( m => m.ModificarPageModule)
   },
   {
-    path: 'modificar',
-    loadChildren: () => import('./pages/modificar/modificar.module').then( m => m.ModificarPageModule)
+    path: 'olvidacontra',
+    loadChildren: () => import('./pages/olvidacontra/olvidacontra.module').then( m => m.OlvidacontraPageModule)
   },
+  {
+    path: 'modifica-perfil/:uid',
+    loadChildren: () => import('./pages/modifica-perfil/modifica-perfil.module').then(m => m.ModificaPerfilPageModule)
+  },
+  {
+    path: 'ver-ruta/:uidconductor',
+    loadChildren: () => import('./pages/ver-ruta/ver-ruta.module').then( m => m.VerRutaPageModule)
+  },
+  {
+    path: 'viaje/:uidviaje',
+    loadChildren: () => import('./pages/viaje/viaje.module').then( m => m.ViajePageModule)
+  }
 ];
 
 @NgModule({
