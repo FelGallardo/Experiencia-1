@@ -4,6 +4,7 @@ import { User } from 'firebase/auth';
 import { ServicesdatosService, Vehiculo, Viaje } from 'src/app/services/servicesdatos.service';
 
 import { NavController } from '@ionic/angular';
+import { isEmpty } from 'rxjs';
 
 declare var google;
 
@@ -34,12 +35,12 @@ export class VerRutaPage implements OnInit {
   map: any;
   googleMaps: any;
   center = { lat: -33.51121437653384, lng: -70.75247732509393 };
-  lati:any ;
-  lng :any; 
+  lati: any;
+  lng: any;
   mapClickListener: any;
   directionsService: any;
   directionsRenderer: any;
-  uidviaje: any ;
+  uidviaje: any;
 
   private googleGeocodingEndpoint = 'https://maps.googleapis.com/maps/api/geocode/json';
 
@@ -56,7 +57,7 @@ export class VerRutaPage implements OnInit {
   ngOnInit() {
     // Obtén el ID del viaje de los parámetros de la URL
     const uidconductor = this.route.snapshot.paramMap.get('uidconductor');
-  
+
     let path = `viajes/${uidconductor}`;
     this.getUsers(uidconductor);
     this.getVehiculo(uidconductor);
@@ -71,17 +72,17 @@ export class VerRutaPage implements OnInit {
       this.lati = viajes.destino.lat
       this.lng = viajes.destino.lng
       console.log(this.lati, this.lng);
-      
+
 
       this.loadMap();
       this.calcularViaje();
     },
-    (error) => {
-      console.error('Error al obtener detalles del viaje:', error);
-    });
+      (error) => {
+        console.error('Error al obtener detalles del viaje:', error);
+      });
   }
 
-  
+
   async loadMap() {
     try {
       let googleMaps: any = await this.service.loadGoogleMaps();
@@ -116,7 +117,7 @@ export class VerRutaPage implements OnInit {
     });
   }
 
-  
+
   addMarker(location, isStartMarker = false) {
     const icon = {
       url: isStartMarker ? 'assets/icon/start.png' : 'assets/icon/ping.png',
@@ -136,75 +137,75 @@ export class VerRutaPage implements OnInit {
 
       let path = `viajes/${uidConductor}`;
 
-      this.service.getDocument(path).then((viaje: Viaje)=>{
-      
-      let destino: any = {
-        latitud: this.lati,
-        longitud: this.lng
-      };
+      this.service.getDocument(path).then((viaje: Viaje) => {
+
+        let destino: any = {
+          latitud: this.lati,
+          longitud: this.lng
+        };
 
 
-      console.log('Destino: ', viaje.destino);
-  
-      console.log('Location:', destino);
-  
-      // Verifica si destino tiene las propiedades latitud y longitud
-      if (viaje.destino !== null && 'latitud' in viaje.destino && 'longitud' in viaje.destino) {
-        this.calculateAndDisplayRoute(viaje.destino.latitud, viaje.destino.longitud);
-      } else {
-        console.warn('No se pudo obtener la ubicación válida. Verifica la dirección.');
-      }
+        console.log('Destino: ', viaje.destino);
+
+        console.log('Location:', destino);
+
+        // Verifica si destino tiene las propiedades latitud y longitud
+        if (viaje.destino !== null && 'latitud' in viaje.destino && 'longitud' in viaje.destino) {
+          this.calculateAndDisplayRoute(viaje.destino.latitud, viaje.destino.longitud);
+        } else {
+          console.warn('No se pudo obtener la ubicación válida. Verifica la dirección.');
+        }
       });
     } catch (error) {
       console.error('Error al calcular la ubicación:', error);
     }
   }
 
-  getUsers(uid: any){
+  getUsers(uid: any) {
 
 
     let path = `users/${uid}`;
 
-    this.service.getDocument(path).then((users : User)=>{
-      console.log('user',users);
+    this.service.getDocument(path).then((users: User) => {
+      console.log('user', users);
       this.conductor = users;
-    
+
     });
 
   }
-  getVehiculo(uid: any){
+  getVehiculo(uid: any) {
 
 
     let path = `vehiculos/${uid}`;
 
-    this.service.getDocument(path).then((vehiculos : Vehiculo)=>{
-      console.log('Vehiculo',vehiculos);
+    this.service.getDocument(path).then((vehiculos: Vehiculo) => {
+      console.log('Vehiculo', vehiculos);
       this.vehiculocon = vehiculos;
-    
+
     });
 
   }
 
   calculateAndDisplayRoute(lat: any, lng: any) {
     console.log('calculateAndDisplayRoute - endLocation:', lat, lng);
-  
+
     // Verifica si endLocation es una instancia válida de LatLng o LatLngLiteral
     if (!lat || !lng) {
       console.error('Formato de ubicación no válido para endLocation:', lat, lng);
       return;
     }
-  
+
     // Convierte endLocation en una instancia de LatLng si no lo es
     const endLocation = new this.googleMaps.LatLng(lat, lng);
-  
+
     const startLocation = new this.googleMaps.LatLng(this.center.lat, this.center.lng);
-  
+
     const request = {
       origin: startLocation,
       destination: endLocation,
       travelMode: 'DRIVING',
     };
-  
+
     this.directionsService.route(request, (response, status) => {
       if (status === 'OK') {
         this.service.destino = endLocation;
@@ -215,13 +216,34 @@ export class VerRutaPage implements OnInit {
     });
   }
 
-  iralviaje(uidviaje : any ){
-    console.log('ID del viaje:', uidviaje);
-    if (uidviaje) {
-      this.navCtrl.navigateForward(`/viaje/${uidviaje}`);
-    } else {
-      console.error('El ID del viaje es nulo o indefinido.');
-    }
+  iralviaje(uidviaje: any) {
+    this.service.obtenerUIDUsuarioActual().then((uid) => {
+      console.log('ID del viaje:', uidviaje);
+
+      console.log(this.viaje.cantP);
+
+      let path = `viajes/${uidviaje}`;
+      this.viaje.cantP = this.viaje.cantP - 1;
+
+      if (!this.viaje.uidpasajero1) {
+        this.viaje.uidpasajero1 = uid;
+      } else if (!this.viaje.uidpasajero2) {
+        this.viaje.uidpasajero2 = uid;
+      } else if (!this.viaje.uidpasajero3) {
+        this.viaje.uidpasajero3 = uid;
+      } else if (!this.viaje.uidpasajero4) {
+        this.viaje.uidpasajero4 = uid;
+      }
+
+      console.log(this.viaje.cantP);
+      this.service.updateDocument(path, this.viaje);
+
+      if (uidviaje) {
+        this.navCtrl.navigateForward(`/viaje/${uidviaje}`);
+      } else {
+        console.error('El ID del viaje es nulo o indefinido.');
+      }
+    });
   }
 }
 

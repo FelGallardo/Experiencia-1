@@ -48,6 +48,8 @@ export class BuscaVehiPage implements OnInit {
   
   irAModificarPerfil(uidconductor: any) {
     console.log('ID del viaje:', uidconductor);
+
+    
     if (uidconductor) {
       this.navCtrl.navigateForward(['/ver-ruta', uidconductor]);
     } else {

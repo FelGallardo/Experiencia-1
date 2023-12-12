@@ -1,6 +1,5 @@
 <ion-header >
   <ion-toolbar color="primary">
-    <ion-back-button slot="start" ></ion-back-button>
     <ion-title>Viaje</ion-title>
 
   </ion-toolbar>
@@ -12,7 +11,7 @@
   <div class="map" #map ></div>
 
   <ion-card>
-    <ion-card-content>
+    <ion-card-content *ngIf="viaje">
       <ion-label *ngIf="viaje && viaje.inicionom">
         <h2 slot="start">Inicio Viaje:</h2>
         <div class="name" slot="start">&nbsp;{{ viaje.inicionom }}</div>
@@ -31,6 +30,26 @@
       <ion-label *ngIf="conductor && conductor.nombre">
         <h2 slot="start">Conductor:</h2>
         <div class="name" slot="start">&nbsp;{{ conductor.nombre }}</div>
+      </ion-label>
+      <br>
+      <ion-label *ngIf="conductor && conductor.nombre">
+        <h2 slot="start">Pasajero Nro1:</h2>
+        <div class="name" slot="start">&nbsp;{{nom1 }}</div>
+      </ion-label>
+      <br>
+      <ion-label *ngIf="conductor && conductor.nombre">
+        <h2 slot="start">Pasajero Nro2:</h2>
+        <div class="name" slot="start">&nbsp;{{ nom2}}</div>
+      </ion-label>
+      <br>
+      <ion-label *ngIf="conductor && conductor.nombre">
+        <h2 slot="start">Pasajero Nro3:</h2>
+        <div class="name" slot="start">&nbsp;{{nom3}}</div>
+      </ion-label>
+      <br>
+      <ion-label *ngIf="conductor && conductor.nombre">
+        <h2 slot="start">Pasajero Nro4:</h2>
+        <div class="name" slot="start">&nbsp;{{nom4 }}</div>
       </ion-label>
       <ion-label *ngIf="uid == true">
         <ion-button (click)="eliminarviaje()">Terminar Viaje</ion-button>

@@ -1,8 +1,8 @@
 <ion-content class="ion-padding letritas">
     <!-- Itera sobre la lista de viajes y muestra la información de cada uno -->
 
-    <ion-card class="letritas" *ngFor="let viaje of nViajes" style="margin-top: 100px;">
-      <ion-card-content>
+    <ion-card class="letritas" *ngFor="let viaje of nViajes" style="margin-top: 100px;" >
+      <ion-card-content *ngIf="viaje.cantP > 0">
         <ion-label>
           <h2 slot="start">Inicio Viaje:</h2>
           <div class="name" slot="start">&nbsp;{{ viaje.inicionom }}</div>

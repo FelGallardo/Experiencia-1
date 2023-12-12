@@ -1,5 +1,7 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
+import { Console, log } from 'console';
 import { ServicesdatosService, User, Vehiculo, Viaje } from 'src/app/services/servicesdatos.service';
 
 
@@ -17,7 +19,7 @@ interface UsuarioConNombre extends User {
   templateUrl: './viaje.page.html',
   styleUrls: ['./viaje.page.scss'],
 })
-export class ViajePage implements OnInit {
+export class ViajePage implements OnInit, OnDestroy {
 
 
   viaje: Viaje;
@@ -33,6 +35,21 @@ export class ViajePage implements OnInit {
   directionsService: any;
   directionsRenderer: any;
   uid: any;
+  pasajero1:User | undefined;
+  pasajero2:User | undefined;
+  pasajero3:User | undefined;
+  pasajero4:User | undefined;
+
+  nom1 :string = '';
+  nom2 :string = '';
+  nom3 :string = '';
+  nom4 :string = '';
+  private intervalId: any;
+
+
+  
+
+
 
 
   private googleGeocodingEndpoint = 'https://maps.googleapis.com/maps/api/geocode/json';
@@ -43,6 +60,7 @@ export class ViajePage implements OnInit {
     private service: ServicesdatosService,
     private renderer: Renderer2,
     private router: Router,
+    private navCtrl: NavController
 
   ) { }
 
@@ -61,7 +79,7 @@ export class ViajePage implements OnInit {
       const usuid = await this.service.obtenerUIDUsuarioActual();
       console.log('UID del conductor:', ver);
       console.log('UID actual:', usuid);
-  
+
       if (await uidconductor === usuid) {
         this.uid = true;
       }
@@ -88,6 +106,17 @@ export class ViajePage implements OnInit {
       (error) => {
         console.error('Error al obtener detalles del viaje:', error);
       });
+      this.intervalId = setInterval(() => {
+        this.actualiza();
+        this.verificarEstadoViaje();
+      }, 1000);
+      
+  }
+
+
+  ngOnDestroy() {
+    // Detén el intervalo cuando el componente se destruya
+    clearInterval(this.intervalId);
   }
 
   async siconduc(uidcon) {
@@ -95,7 +124,7 @@ export class ViajePage implements OnInit {
       let usuid = await this.service.obtenerUIDUsuarioActual();
       console.log('UID del conductor:', uidcon);
       console.log('UID actual:', usuid);
-  
+
       if (uidcon == usuid) {
         this.uid = true;
       }
@@ -190,7 +219,7 @@ export class ViajePage implements OnInit {
     this.service.getDocument(path).then((users: User) => {
       console.log('user', users);
       this.conductor = users;
-      
+
 
     });
 
@@ -208,20 +237,34 @@ export class ViajePage implements OnInit {
 
   }
 
-  async eliminarviaje(){
-    let uid = this.service.obtenerUIDUsuarioActual();
-    this.eliminardoc(await uid);
-  }
+  async eliminarviaje() {
+    let uidPromise = this.service.obtenerUIDUsuarioActual();
+    let uid = await uidPromise;  // Espera a que la Promise se resuelva
+    // Actualiza el estado del viaje
+    let path = `viajes/${this.viaje.uidconductor}`;
+    this.service.getDocument(path).then((viajeter: Viaje) => {
+      console.log('lo que sube el update de viajeterminado',viajeter);
+      
+      viajeter.viajeTerminado = true;
+      let viaj: Viaje = viajeter;
+      console.log('lo que sube el update de viaj',viaj);
+      this.service.updateDocument(path, viaj);
+    })
 
-  eliminardoc(uid: string){
-    
+    // Navega a la página de inicio después de eliminar el documento
     let correo = this.conductor.email;
-    let path = `viajes/${uid}`;
     this.router.navigate(['/inicio/iniciotab'], { queryParams: { correo } });
 
-    this.service.eliminarDocumento(path);
   }
 
+  eliminardoc(uid: string) {
+    let path = `viajes/${uid}`;
+    this.service.eliminarDocumento(path);
+
+    // Navega a la página de inicio después de eliminar el documento
+    let correo = this.conductor.email;
+    this.router.navigate(['/inicio/iniciotab'], { queryParams: { correo } });
+  }
   calculateAndDisplayRoute(lat: any, lng: any) {
     console.log('calculateAndDisplayRoute - endLocation:', lat, lng);
 
@@ -251,4 +294,136 @@ export class ViajePage implements OnInit {
       }
     });
   }
+
+  actualiza() {
+    if (this.viaje) {
+
+
+      let uidConductor = this.viaje.uidconductor;
+
+      let path = `viajes/${uidConductor}`;
+
+      this.service.getDocument(path).then((viajes: Viaje) => {
+
+        this.viaje = viajes;
+
+        
+
+      }, (error) => {
+        console.error('Error al obtener detalles del viaje:', error);
+      });
+      
+      let pathu1 = `users/${this.viaje.uidpasajero1}`;
+
+      this.service.getDocument(pathu1).then((users : User)=>{
+        this.pasajero1 = users;
+        if(this.pasajero1){
+          this.nom1 = this.pasajero1.nombre;
+        }
+      });
+
+      let pathu2 = `users/${this.viaje.uidpasajero2}`;
+
+
+      this.service.getDocument(pathu2).then((users : User)=>{
+        this.pasajero2 = users;
+        if(this.pasajero2){
+          this.nom2 = this.pasajero2.nombre;
+        }
+      });
+
+      let pathu3 = `users/${this.viaje.uidpasajero3}`;
+
+
+      this.service.getDocument(pathu3).then((users : User)=>{
+        this.pasajero3 = users;
+        if(this.pasajero3){
+          this.nom3 = this.pasajero3.nombre;
+        }
+      });
+
+      let pathu4 = `users/${this.viaje.uidpasajero4}`;
+
+
+      this.service.getDocument(pathu4).then((users : User)=>{
+        this.pasajero4 = users;
+        if(this.pasajero4){
+          this.nom4 = this.pasajero4.nombre;
+        }
+      });
+    }
+  }
+
+  verificarEstadoViaje() {
+    let path = `viajes/${this.viaje.uidconductor}`;
+    this.service.getDocument(path).then((viajeterdora: Viaje) => {
+      console.log('Primer get: ', viajeterdora);
+  
+      if (viajeterdora['viajeTerminado'] === true) {
+        let uid = this.service.obtenerUIDUsuarioActual();
+        let path = `viajes/${this.viaje.uidconductor}`;
+        this.service.getDocument(path).then(async (viajeter: Viaje) => {
+          console.log('Segundo get: ', viajeter);
+  
+          if (viajeter.viajeTerminado === true) {
+            if (viajeter.uidpasajero1 === await uid) {
+              viajeter.uidpasajero1 = null;
+  
+              let path = `viajes/${this.viaje.uidconductor}`;
+              let viaj: Viaje = viajeter;
+              this.service.updateDocument(path, viaj);
+  
+            } else if (viajeter.uidpasajero2 === await uid) {
+              viajeter.uidpasajero2 = null;
+  
+              let path = `viajes/${this.viaje.uidconductor}`;
+              let viaj: Viaje = viajeter;
+              this.service.updateDocument(path, viaj);
+  
+            } else if (viajeter.uidpasajero3 === await uid) {
+              viajeter.uidpasajero3 = null;
+  
+              let path = `viajes/${this.viaje.uidconductor}`;
+              let viaj: Viaje = viajeter;
+              this.service.updateDocument(path, viaj);
+  
+            } else if (viajeter.uidpasajero4 === await uid) {
+              viajeter.uidpasajero4 = null;
+  
+              let path = `viajes/${this.viaje.uidconductor}`;
+              let viaj: Viaje = viajeter;
+              this.service.updateDocument(path, viaj);
+            }
+          }
+        });
+        this.service.getDocument(path).then((viajeter: Viaje) => {
+          console.log('Tercer get: ', viajeter);
+  
+          if (viajeterdora['viajeTerminado'] === true) {
+            if (!viajeter.uidpasajero1 && !viajeter.uidpasajero2 && !viajeter.uidpasajero3 && !viajeter.uidpasajero4) {
+              console.log('Eliminando el viaje porque no hay pasajeros.');
+              this.eliminardoc(viajeter.uidconductor);
+            } else {
+              console.log('No se eliminó el viaje. Aún hay pasajeros.');
+            }
+  
+            let path = `users/${uid}`;
+            this.service.getDocument(path).then((users: User) => {
+              console.log(users);
+              let correo = users.correo;
+  
+              setTimeout(() => {
+                clearInterval(this.intervalId);
+                console.log('Intervalo detenido después de 5 segundos');
+              }, 5000);
+  
+              this.router.navigate(['/inicio/iniciotab'], { queryParams: { correo } });
+            });
+          }
+        });
+      }
+    });
+  }
+
+
 }

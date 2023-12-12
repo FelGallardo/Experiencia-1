@@ -45,12 +45,13 @@ export interface Viaje {
   
   nomdestino: string;
   cantP: number;
-  uidconductor: any ;
-  uidpasajero1: any | null;
-  uidpasajero2: any | null;
-  uidpasajero3: any | null;
-  uidpasajero4: any | null;
+  uidconductor: string ;
+  uidpasajero1: string | null;
+  uidpasajero2: string | null;
+  uidpasajero3: string | null;
+  uidpasajero4: string | null;
   costo: number;
+  viajeTerminado: boolean;
 
 }
 
